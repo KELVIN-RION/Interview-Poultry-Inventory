@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Poultry Shop Inventory</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    margin: 0;
+    background-image: url("image.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+  }
+  .container {
+    max-width: 500px;
+    margin: auto;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  }
+  input[type="number"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  button {
+    padding: 10px 15px;
+    width: 100%;
+    background-color: #2850a7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  .output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #e9ecef;
+    border-radius: 10px;
+  }
+</style>
+
+</head>
+<body>
+  <div class="container">
+    <h2>Poultry Order Processor</h2>
+    <label>Number of Legs:</label>
+    <input type="number" id="legs" min="0" value="0" />
+
+    <label>Number of Wings:</label>
+    <input type="number" id="wings" min="0" value="0" />
+
+    <label>Number of Flesh Portions:</label>
+    <input type="number" id="flesh" min="0" value="0" />
+
+    <button onclick="processOrder()">Calculate Order</button>
+
+    <div class="output" id="output"></div>
+  </div>
+
+  <script>
+    function processOrder() {
+      const legs = parseInt(document.getElementById("legs").value) || 0;
+      const wings = parseInt(document.getElementById("wings").value) || 0;
+      const flesh = parseInt(document.getElementById("flesh").value) || 0;
+
+      const weightLeg = 0.25;
+      const weightWing = 0.25;
+      const weightFlesh = 1.0;
+
+      const totalWeight = (legs * weightLeg) + (wings * weightWing) + (flesh * weightFlesh);
+
+      const neededLegs = Math.ceil(legs / 2);
+      const neededWings = Math.ceil(wings / 2);
+      const neededFlesh = flesh;
+
+      const hensRequired = Math.max(neededLegs, neededWings, neededFlesh);
+
+      const totalHensWeight = hensRequired * 2;
+      const usedWeight = totalWeight;
+      const remainingWeight = totalHensWeight - usedWeight;
+
+      const remLegs = (hensRequired * 2) - legs;
+      const remWings = (hensRequired * 2) - wings;
+      const remFlesh = hensRequired - flesh;
+
+      const remWeight = (remLegs * weightLeg) + (remWings * weightWing) + (remFlesh * weightFlesh);
+
+      const result = `
+        <strong>Total Order Weight:</strong> ${totalWeight.toFixed(2)} kg<br>
+        <strong>Number of Whole Chickens Needed:</strong> ${hensRequired}<br>
+        <strong>Remaining Parts:</strong><br>
+        - Legs: ${remLegs} (${(remLegs * weightLeg).toFixed(2)} kg)<br>
+        - Wings: ${remWings} (${(remWings * weightWing).toFixed(2)} kg)<br>
+        - Flesh Portions: ${remFlesh} (${(remFlesh * weightFlesh).toFixed(2)} kg)<br>
+        <strong>Total Remaining Weight:</strong> ${remWeight.toFixed(2)} kg
+      `;
+
+      document.getElementById("output").innerHTML = result;
+    }
+  </script>
+</body>
+</html>
